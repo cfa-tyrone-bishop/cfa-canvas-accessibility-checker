@@ -1,0 +1,49 @@
+# Flask Framework
+Flask
+Flask-CORS
+
+# LTI 1.3 Integration
+PyLTI1p3
+
+# Canvas API Client
+canvasapi
+
+# HTTP Requests
+requests
+
+# HTML/XML Parsing for Accessibility Checks
+beautifulsoup4
+lxml
+
+# Accessibility Checking
+axe-selenium-python
+selenium
+
+# PDF Generation for Reports
+reportlab
+WeasyPrint
+
+# Database (choose based on your needs)
+Flask-SQLAlchemy
+# OR
+# pymongo==4.6.0  # For MongoDB
+
+# Environment Variables
+python-dotenv
+
+# Data Processing
+pandas
+
+# Async Support (optional)
+aiohttp
+
+# Logging
+python-json-logger
+
+# Authentication & Security
+cryptography
+PyJWT
+
+# Testing (optional)
+pytest
+pytest-flask

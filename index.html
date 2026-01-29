@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Accessibility & Settings Tool - DEMO</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Include the entire CSS inline for standalone demo */
+        /* Copy from styles.css */
+    </style>
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+    <div style="background: #fef3c7; padding: 1rem; text-align: center; border-bottom: 3px solid #f59e0b; font-family: 'Work Sans', sans-serif;">
+        <strong>⚠️ DEMO MODE</strong> - This is a standalone preview. Backend functionality requires Python Flask server.
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="tool-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-universal-access header-icon"></i>
+                    <h1 class="tool-title">Canvas Course Tools</h1>
+                </div>
+                <div class="subtitle">Learning Design & Innovation</div>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation" role="tablist">
+            <button class="tab-button active" 
+                    role="tab" 
+                    aria-selected="true" 
+                    aria-controls="accessibility-panel"
+                    data-tab="accessibility">
+                <i class="fas fa-check-circle"></i>
+                <span>Accessibility Check</span>
+            </button>
+            <button class="tab-button" 
+                    role="tab" 
+                    aria-selected="false" 
+                    aria-controls="settings-panel"
+                    data-tab="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </button>
+            <button class="tab-button" 
+                    role="tab" 
+                    aria-selected="false" 
+                    aria-controls="about-panel"
+                    data-tab="about">
+                <i class="fas fa-info-circle"></i>
+                <span>About</span>
+            </button>
+        </nav>
+
+        <!-- Tab Content Panels -->
+        <main class="tab-content">
+            <!-- Accessibility Check Panel -->
+            <div id="accessibility-panel" 
+                 class="tab-panel active" 
+                 role="tabpanel" 
+                 aria-labelledby="accessibility-tab">
+                
+                <div class="panel-header">
+                    <h2>Accessibility Audit</h2>
+                    <p class="panel-description">Run comprehensive accessibility checks on your course content</p>
+                </div>
+
+                <div class="content-card">
+                    <div class="scan-controls">
+                        <button class="btn btn-primary" id="run-scan">
+                            <i class="fas fa-play-circle"></i>
+                            Run Accessibility Scan
+                        </button>
+                        <div class="scan-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="check-pages" checked>
+                                <span>Pages</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="check-assignments" checked>
+                                <span>Assignments</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="check-announcements" checked>
+                                <span>Announcements</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="check-modules">
+                                <span>Modules</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="scan-results" id="scan-results" style="display: none;">
+                        <div class="results-header">
+                            <h3>Scan Results</h3>
+                            <span class="scan-date" id="scan-date"></span>
+                        </div>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card stat-success">
+                                <div class="stat-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="passed-count">0</div>
+                                    <div class="stat-label">Passed</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card stat-warning">
+                                <div class="stat-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="warning-count">0</div>
+                                    <div class="stat-label">Warnings</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card stat-error">
+                                <div class="stat-icon">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="error-count">0</div>
+                                    <div class="stat-label">Errors</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="issues-list" id="issues-list">
+                            <!-- Issues will be dynamically inserted here -->
+                        </div>
+
+                        <div class="results-actions">
+                            <button class="btn btn-secondary" id="export-report">
+                                <i class="fas fa-download"></i>
+                                Export Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="loading-state" id="loading-state" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Scanning course content...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Panel -->
+            <div id="settings-panel" 
+                 class="tab-panel" 
+                 role="tabpanel" 
+                 aria-labelledby="settings-tab"
+                 style="display: none;">
+                
+                <div class="panel-header">
+                    <h2>Tool Settings</h2>
+                    <p class="panel-description">Configure accessibility checking preferences</p>
+                </div>
+
+                <div class="content-card">
+                    <form id="settings-form">
+                        <div class="settings-section">
+                            <h3 class="section-title">Scan Configuration</h3>
+                            
+                            <div class="form-group">
+                                <label for="scan-depth">Scan Depth</label>
+                                <select id="scan-depth" class="form-control">
+                                    <option value="basic">Basic (Quick Scan)</option>
+                                    <option value="standard" selected>Standard (Recommended)</option>
+                                    <option value="comprehensive">Comprehensive (Detailed)</option>
+                                </select>
+                                <small class="form-help">Controls how thoroughly content is analyzed</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="wcag-level">WCAG Compliance Level</label>
+                                <select id="wcag-level" class="form-control">
+                                    <option value="A">Level A (Minimum)</option>
+                                    <option value="AA" selected>Level AA (Recommended)</option>
+                                    <option value="AAA">Level AAA (Enhanced)</option>
+                                </select>
+                                <small class="form-help">Target accessibility standard</small>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3 class="section-title">Notifications</h3>
+                            
+                            <div class="form-group">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="email-notifications" class="toggle-input">
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-text">Email notifications on scan completion</span>
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="auto-scan" class="toggle-input">
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-text">Automatic weekly scans</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3 class="section-title">Report Preferences</h3>
+                            
+                            <div class="form-group">
+                                <label for="report-format">Export Format</label>
+                                <select id="report-format" class="form-control">
+                                    <option value="pdf">PDF Document</option>
+                                    <option value="csv">CSV Spreadsheet</option>
+                                    <option value="json">JSON Data</option>
+                                    <option value="html">HTML Report</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="include-screenshots" class="toggle-input">
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-text">Include screenshots in reports</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Save Settings
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="reset-settings">
+                                <i class="fas fa-undo"></i>
+                                Reset to Defaults
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- About Panel -->
+            <div id="about-panel" 
+                 class="tab-panel" 
+                 role="tabpanel" 
+                 aria-labelledby="about-tab"
+                 style="display: none;">
+                
+                <div class="panel-header">
+                    <h2>About This Tool</h2>
+                    <p class="panel-description">Information and resources</p>
+                </div>
+
+                <div class="content-card">
+                    <div class="about-content">
+                        <div class="about-section">
+                            <div class="about-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <h3>Canvas Accessibility & Settings Tool</h3>
+                            <p class="version">Version 1.0.0</p>
+                            <p>This LTI tool helps instructors and course designers ensure their Canvas courses meet accessibility standards and best practices. Developed by the Learning Design & Innovation Team at CFA Institute.</p>
+                        </div>
+
+                        <div class="about-section">
+                            <h4><i class="fas fa-star"></i> Key Features</h4>
+                            <ul class="feature-list">
+                                <li>Comprehensive accessibility auditing against WCAG 2.1 guidelines</li>
+                                <li>Automated scanning of pages, assignments, and announcements</li>
+                                <li>Detailed issue reporting with remediation suggestions</li>
+                                <li>Customizable scan configurations and notification preferences</li>
+                                <li>Exportable reports in multiple formats</li>
+                            </ul>
+                        </div>
+
+                        <div class="about-section">
+                            <h4><i class="fas fa-book"></i> Resources</h4>
+                            <div class="resources-grid">
+                                <a href="#" class="resource-link">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>User Documentation</span>
+                                </a>
+                                <a href="#" class="resource-link">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    <span>Accessibility Guide</span>
+                                </a>
+                                <a href="#" class="resource-link">
+                                    <i class="fas fa-question-circle"></i>
+                                    <span>FAQ</span>
+                                </a>
+                                <a href="#" class="resource-link">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>Contact Support</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="about-section">
+                            <h4><i class="fas fa-shield-alt"></i> Privacy & Compliance</h4>
+                            <p>This tool processes course content locally and does not store or transmit sensitive information outside your Canvas instance. All scans and reports comply with FERPA and institutional data policies.</p>
+                        </div>
+
+                        <div class="about-footer">
+                            <p>&copy; 2026 CFA Institute. All rights reserved.</p>
+                            <p>Learning Design & Innovation Team</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="static/js/script.js"></script>
+</body>
+</html>
